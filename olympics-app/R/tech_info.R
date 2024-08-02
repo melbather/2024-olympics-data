@@ -1,6 +1,6 @@
-#Technical Info UI ---------------------------------------------------------------
+#Info UI ---------------------------------------------------------------
 
-tech_info_ui <- function(id, label = "tech_info_ui") {
+info_ui <- function(id, label = "info_ui") {
   ns <- NS(id)
   tagList(
     fluidRow(
@@ -13,9 +13,9 @@ tech_info_ui <- function(id, label = "tech_info_ui") {
 
 
 
-#Technical Info Server ----------------------------------------------------
+#Info Server ----------------------------------------------------
 
-tech_info_server <- function(id, parent, label = "tech_info_server") {
+info_server <- function(id, parent, label = "info_server") {
   
   moduleServer(id, function(input, output, session) {
    

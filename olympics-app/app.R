@@ -1,5 +1,3 @@
-library(shiny)
-
 #Read in modules
 source("global.R")
 source("R/get-data.R", local = TRUE)
@@ -16,15 +14,15 @@ ui <- fluidPage(
          tabPanel(value = "map",
                   h3(id = "nav_title", "Map"),
                   map_ui(id = "map")),
-         tabPanel(value = "tech_info",
+         tabPanel(value = "info",
                   h3(id = "nav_title", "Info"),
-                  tech_info_ui(id = "tech_info"))
+                  info_ui(id = "info"))
   )
 )
 
 server <- function(input, output) {
   map_server(id = "map", parent = session)
-  info_server(id = "tech_info", parent = session)
+  info_server(id = "info", parent = session)
 }
 
 shinyApp(ui = ui, server = server)
