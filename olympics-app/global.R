@@ -16,6 +16,8 @@ library(gt)
 # Set dropdown selections
 medal_types <- c("Total medals", "Gold", "Silver", "Bronze")
 stat_types <- c("Number of medals", "Medals per capita")
+medal_types_per_capita_vars <- c("total_medals_per_capita", "gold_medals_per_capita",
+                                 "silver_medals_per_capita", "bronze_medals_per_capita")
 
 # Connect to API
 base_URL <- "https://apis.codante.io/olympic-games/"
@@ -29,7 +31,7 @@ country_pops <- countrypops %>%
 
 # Consolidate data
 world <- ne_countries(scale = "medium", returnclass = "sf")
-medal_cols <- c("gold_medals", "silver_medals", "bronze_medals", "total_medals")
+medal_cols <- c("total_medals", "gold_medals", "silver_medals", "bronze_medals")
 all_data <- world %>%
   left_join(results, join_by(gu_a3 == id), keep = TRUE) %>%
   select(-c(name.y, continent.y)) %>%
