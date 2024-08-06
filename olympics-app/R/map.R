@@ -17,6 +17,7 @@ map_ui <- function(id, label = "map_ui") {
         
         # Main Panel
         mainPanel(
+          h3(htmlOutput(ns("map_title"))),
           plotlyOutput(ns("map_plot"))
         )
       )
@@ -34,6 +35,19 @@ map_server <- function(id, parent, label = "map_server") {
   
   moduleServer(id, function(input, output, session) {
     
+    output$map_title <- renderUI({
+      req(input$medal_type, input$stat_type)
+      if(input$medal_type == "Total medals") title_pt1 <- "Total"
+      else if(input$medal_type == "Gold") title_pt1 <- "Number of Gold"
+      else if(input$medal_type == "Silver") title_pt1 <- "Number of Silver"
+      else title_pt1 <- "Number of Bronze"
+      
+      if(input$stat_type == "Medals per capita") title_ending <- "Per Capita"
+      else title_ending <- "by Country"
+      
+      paste(title_pt1, "Medals", title_ending)
+    })
+    
     output$map_plot <- renderPlotly({
       req(input$medal_type, input$stat_type)
       
@@ -46,10 +60,9 @@ map_server <- function(id, parent, label = "map_server") {
       else fill_var <- medal_vars[4]
     
       world <- ne_countries(scale = "medium", returnclass = "sf")
-      #browser()
       p <- ggplot(all_data, aes(fill = !!sym(fill_var))) +
-        geom_sf() +
-        #scale_color_gradient(low = "blue", high = "red") +
+        geom_sf(size = 0.1) +
+        scale_fill_continuous(type = "viridis", name = input$stat_type) +
         theme_bw()
       ggplotly(p)
     })
