@@ -3,26 +3,30 @@
 map_ui <- function(id, label = "map_ui") {
   ns <- NS(id)
   tagList(
+  fluidPage(
     fluidRow(
-      #Sidebar 
-      sidebarLayout(
-        sidebarPanel(
-          selectInput(ns("medal_type"),
-                      "Medal Type",
-                      choices = medal_types),
-          selectInput(ns("stat_type"),
-                      "Measurement",
-                      choices = stat_types)
-        ),
-        
-        # Main Panel
-        mainPanel(
-          h3(htmlOutput(ns("map_title"))),
-          plotlyOutput(ns("map_plot"))
-        )
+      column(12,
+             wellPanel(
+               selectInput(ns("medal_type"),
+                           "Medal Type",
+                           choices = medal_types),
+               selectInput(ns("stat_type"),
+                           "Measurement",
+                           choices = stat_types),
+               p("Note: the map may be slow to render. It is best viewed on desktop."),
+               p("Select the Autoscale option on the top right of the map upon hover for best viewing."),
+               p("Hover over countries to view numbers. Table coming soon!")
+             )
+      )
+    ),
+    fluidRow(
+      column(12,
+               h3(htmlOutput(ns("map_title"))),
+               br(),
+               plotlyOutput(ns("map_plot"))
       )
     )
-  )
+  ))
   
 }
 
@@ -59,12 +63,14 @@ map_server <- function(id, parent, label = "map_server") {
       else if(input$medal_type == "Silver") fill_var <- medal_vars[3]
       else fill_var <- medal_vars[4]
     
-      world <- ne_countries(scale = "medium", returnclass = "sf")
-      p <- ggplot(all_data, aes(fill = !!sym(fill_var))) +
-        geom_sf(size = 0.1) +
+      world <- ne_countries(scale = 110, returnclass = "sf")
+      p <- ggplot(all_data, aes(fill = !!sym(fill_var), 
+                  text = paste0("Country: ", name_en, "\n",
+                               input$stat_type, ": ", !!sym(fill_var)))) +
+        geom_sf(size = 0.1, color = "white", lwd = 0.05) +
         scale_fill_continuous(type = "viridis", name = input$stat_type) +
         theme_bw()
-      ggplotly(p)
+      ggplotly(p, tooltip = "text")
     })
   })
   
