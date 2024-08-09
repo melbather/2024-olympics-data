@@ -9,8 +9,7 @@ info_ui <- function(id, label = "info_ui") {
            <a href='https://docs.apis.codante.io/olympic-games-english' target='_blank'>codante</a>.
            <br>
            <br>
-           'Per capita' calculations are performed using the `countrypops` data frame from the `gt`
-           R package.
+           'Per capita' calculations are performed using population estimates from the `rnaturalearthdata` R package.
            <br>
            <br>
            The world map is created using the `rnaturalearth`, `rnaturalearthdata`, `ggplot2`, and `plotly`
